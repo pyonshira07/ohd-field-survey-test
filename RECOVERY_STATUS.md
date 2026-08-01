@@ -1,27 +1,21 @@
 # Recovery status
 
-This private repository is a recovery snapshot for the OHD field-survey test application.
+This private repository is a recovery snapshot and clean project reconstruction for the OHD field-survey test application.
 
-## Safely recovered source files
+## Recovered application files
 
-- `src/App.tsx`
-- `src/index.css`
-- `src/types.ts`
-- `src/components/BasicInfoSection.tsx`
-- `src/components/OverviewSection.tsx`
-- `src/components/StructuresSection.tsx`
-- `src/components/BuildingInfoSection.tsx`
-- `src/components/Header.tsx`
+- `src/App.tsx`, `src/main.tsx`, `src/index.css`, `src/types.ts`
+- Survey sections: BasicInfo, Overview, Structures, BuildingInfo, Header
+- Workflow components: ReportPreviewModal, HistoryListModal, QuickToast
+- Utilities: sampleData, formatReport
+- Project configuration: package.json, index.html, vite.config.ts, tsconfig.json
 
-## Not yet recovered
+## Important verification status
 
-- `src/components/ReportPreviewModal.tsx`
-- Supporting project files (`package.json`, `main.tsx`, Vite configuration, and other original components)
-
-The original AI Studio project could not be exported reliably and currently has a startup/runtime failure. This snapshot must not be treated as a runnable deployment until the remaining files are recovered and a local build succeeds.
+The project files now have a standard Vite/React folder layout. A local `npm run build` has not yet been completed because this local environment cannot authenticate to the private GitHub repository. Do not publish this reconstructed version to AI Studio until a local build and mobile test both pass.
 
 ## Safety
 
 - The original production app is not modified.
 - This repository is private.
-- Changes should be made in branches and tested locally before publishing to AI Studio.
+- Create a branch and run the build before making future changes or publishing.
