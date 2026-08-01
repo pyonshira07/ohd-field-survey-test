@@ -17,6 +17,29 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
 }) => {
   if (!isOpen) return null;
 
+  const hasValue = (value?: string | number | boolean) => value !== undefined && value !== '' && value !== false;
+  const formatArea = (value: string) => (value ? `${value}㎡` : '未入力');
+  const formatLength = (value: string) => (value ? `${value}m` : '未入力');
+  const formatBuilding = (building: SurveyReport['buildings'][number], index: number) => {
+    const structure = [building.structure, building.structureSecondary].filter(Boolean).join(' ＋ ') || '未入力';
+    const roof = [building.roofType, building.roofTypeSecondary].filter(Boolean).join(' ＋ ') || '未入力';
+    const totalArea = [building.area1F, building.area2F, building.area3F, building.areaBasement]
+      .reduce((total, value) => total + (Number(value) || 0), 0);
+
+    return (
+      <section key={building.id} className="rounded-xl border border-slate-200 bg-white p-4">
+        <h3 className="text-sm font-extrabold text-slate-900">建物 {index + 1}</h3>
+        <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+          <dt className="text-slate-500">構造</dt><dd className="font-semibold text-slate-800">{structure}</dd>
+          <dt className="text-slate-500">屋根</dt><dd className="font-semibold text-slate-800">{roof}</dd>
+          <dt className="text-slate-500">外壁</dt><dd className="font-semibold text-slate-800">{building.exteriorWall || '未入力'}</dd>
+          <dt className="text-slate-500">実寸面積</dt><dd className="font-semibold text-slate-800">{totalArea ? `${totalArea}㎡` : '未入力'}</dd>
+          {hasValue(building.manualDemolitionRatio) && <><dt className="text-slate-500">手壊し割合</dt><dd className="font-semibold text-slate-800">{building.manualDemolitionRatio}%</dd></>}
+        </dl>
+      </section>
+    );
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/60 p-4 backdrop-blur-sm sm:items-center" role="dialog" aria-modal="true" aria-label="調査内容の確認">
       <div className="w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-2xl">
@@ -29,8 +52,42 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
             <X className="h-5 w-5" />
           </button>
         </div>
-        <div className="max-h-[55vh] overflow-y-auto bg-slate-50 p-4">
-          <pre className="whitespace-pre-wrap break-words rounded-xl border border-slate-200 bg-white p-4 text-xs leading-6 text-slate-700">{JSON.stringify(report, null, 2)}</pre>
+        <div className="max-h-[55vh] space-y-3 overflow-y-auto bg-slate-50 p-4">
+          <section className="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 className="text-sm font-extrabold text-slate-900">案件概要</h3>
+            <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+              <dt className="text-slate-500">案件名</dt><dd className="font-semibold text-slate-800">{report.caseName || '未入力'}</dd>
+              <dt className="text-slate-500">現場住所</dt><dd className="font-semibold text-slate-800">{report.siteAddress || '未入力'}</dd>
+              <dt className="text-slate-500">調査担当</dt><dd className="font-semibold text-slate-800">{report.inspector || '未入力'}</dd>
+              <dt className="text-slate-500">調査日</dt><dd className="font-semibold text-slate-800">{report.surveyDate || '未入力'}</dd>
+              <dt className="text-slate-500">取引先</dt><dd className="font-semibold text-slate-800">{report.clientType || '未入力'}</dd>
+            </dl>
+          </section>
+
+          <section className="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 className="text-sm font-extrabold text-slate-900">基本情報</h3>
+            <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+              <dt className="text-slate-500">使用ダンプ</dt><dd className="font-semibold text-slate-800">{report.dumpTruckType || '未入力'}</dd>
+              <dt className="text-slate-500">道路規制</dt><dd className="font-semibold text-slate-800">{report.roadRestriction || 'なし'}</dd>
+              <dt className="text-slate-500">道路幅 / 歩道幅 / 間口幅</dt><dd className="font-semibold text-slate-800">{[report.roadWidth, report.sidewalkWidth, report.frontageWidth].map(formatLength).join(' / ')}</dd>
+              <dt className="text-slate-500">交通量</dt><dd className="font-semibold text-slate-800">通行人 {report.trafficPedestrians ?? '-'} / 車 {report.trafficCars ?? '-'}</dd>
+              <dt className="text-slate-500">足場可否</dt><dd className="font-semibold text-slate-800">右 {report.scaffoldRight || '-'} / 左 {report.scaffoldLeft || '-'} / 後 {report.scaffoldBack || '-'}</dd>
+            </dl>
+          </section>
+
+          <section className="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 className="text-sm font-extrabold text-slate-900">構造物</h3>
+            <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+              <dt className="text-slate-500">土間 / アスファルト</dt><dd className="font-semibold text-slate-800">{formatArea(report.domaArea)} / {formatArea(report.asphaltArea)}</dd>
+              <dt className="text-slate-500">樹木 / 庭石</dt><dd className="font-semibold text-slate-800">{report.treeVolume || '未入力'}㎥ / {report.stoneVolume || '未入力'}㎥</dd>
+              <dt className="text-slate-500">その他構造物</dt><dd className="font-semibold text-slate-800">{report.otherStructures.length ? report.otherStructures.join('、') : 'なし'}</dd>
+            </dl>
+          </section>
+
+          <div className="space-y-3">
+            <h3 className="px-1 text-sm font-extrabold text-slate-900">建物情報</h3>
+            {report.buildings.length ? report.buildings.map(formatBuilding) : <p className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-500">建物情報なし</p>}
+          </div>
         </div>
         <div className="flex gap-3 border-t border-slate-200 bg-white p-4">
           <button type="button" onClick={onClose} className="flex-1 rounded-xl border border-slate-300 px-4 py-3 text-sm font-bold text-slate-700">修正する</button>
