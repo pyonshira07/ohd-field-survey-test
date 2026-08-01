@@ -93,9 +93,9 @@ export const HistoryListModal: React.FC<HistoryListModalProps> = ({
           <div>
             <h3 className="text-base font-extrabold flex items-center gap-2">
               <FileText className="w-5 h-5 text-amber-400" />
-              保存済み現地調査報告 一覧 ({reports.length}件)
+              保存・送信済み報告 一覧 ({reports.length}件)
             </h3>
-            <p className="text-xs text-slate-400">一時保存の下書きおよび送信済みデータを一覧管理・再編集・CSV出力できます</p>
+            <p className="text-xs text-slate-400">下書き及び送信済みの調査報告を再編集できます。</p>
           </div>
           <button
             type="button"

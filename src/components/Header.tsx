@@ -25,7 +25,7 @@ export const Header: React.FC<HeaderProps> = ({
             <h1 className="text-lg font-extrabold text-white leading-tight tracking-wide flex items-center gap-2">
               現地調査報告【OHD専用】
             </h1>
-            <p className="text-xs text-slate-400">解体工事専用｜写真・謄本スキャンなし簡易入力</p>
+            <p className="text-xs text-slate-400">入力自動保存・下書き保存機能搭載</p>
           </div>
         </div>
 

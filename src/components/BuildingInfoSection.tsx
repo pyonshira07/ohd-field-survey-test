@@ -271,14 +271,15 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
               <label className="text-xs font-bold text-slate-800">【手壊し割合】</label>
               <div className="relative max-w-40">
                 <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  step="0.1"
-                  inputMode="decimal"
-                  value={bldg.manualDemolitionRatio}
-                  onChange={(e) => updateBuilding(index, { manualDemolitionRatio: Number(e.target.value) || 0 })}
-                  placeholder="0"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  value={bldg.manualDemolitionRatio === 0 ? '' : bldg.manualDemolitionRatio}
+                  onChange={(e) => {
+                    const digits = e.target.value.replace(/[^0-9]/g, '');
+                    updateBuilding(index, { manualDemolitionRatio: digits ? Number(digits) : 0 });
+                  }}
+                  placeholder="例：30"
                   className="w-full px-3 py-2 pr-8 rounded-lg border border-slate-300 text-sm font-semibold text-slate-900 bg-white"
                 />
                 <span className="absolute right-3 top-2.5 text-sm text-slate-500 font-bold">%</span>
