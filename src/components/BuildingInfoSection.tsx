@@ -185,6 +185,8 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                 </div>
               </div>
 
+            </div>
+
             {/* 【屋根】 & 【外壁】 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* 【屋根】 */}
