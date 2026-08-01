@@ -1,23 +1,20 @@
 import { SurveyReport } from '../types';
 
 export const INSPECTOR_OPTIONS = [
-  '山田太郎',
-  '佐藤次郎',
-  '鈴木一郎',
-  '田中三郎',
-  '高橋四郎',
-  '渡辺五郎',
-  '手入力'
+  '萩嶋',
+  '浅野',
+  '星川',
+  '白戸'
 ];
 
 export const DUMP_TRUCK_OPTIONS = [
   '選択してください',
-  '2tダンプ',
-  '3tダンプ',
-  '4tダンプ',
-  '4tロング',
-  '10tダンプ',
-  '軽トラ'
+  '搬入不可',
+  '3t',
+  '4t',
+  '軽トラ',
+  '2t',
+  '大型'
 ];
 
 export const ROAD_RESTRICTION_OPTIONS = [
@@ -59,8 +56,7 @@ export const OTHER_STRUCTURE_OPTIONS = [
   '浄化槽',
   '井戸',
   'カーポート',
-  '物置',
-  '越境物、電線、電柱等'
+  '物置'
 ];
 
 export function createEmptyReport(): SurveyReport {
@@ -72,13 +68,13 @@ export function createEmptyReport(): SurveyReport {
     status: 'draft',
 
     siteAddress: '',
-    inspector: '山田太郎',
+    inspector: '',
     surveyDate: todayStr,
     clientType: '依頼主',
 
     notesAndPrecautions: '',
-    dumpTruckType: '3tダンプ',
-    roadRestriction: '3t規制',
+    dumpTruckType: '',
+    roadRestriction: '',
     isDeadEnd: false,
     roadWidth: '',
     sidewalkWidth: '',

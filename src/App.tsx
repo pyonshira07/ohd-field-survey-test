@@ -21,9 +21,27 @@ export default function App() {
       if (savedDraft) {
         const parsed = JSON.parse(savedDraft);
         // 旧テンプレートの例文だけを、入力値ではなくplaceholderとして扱うための一度きりの移行。
+        const dumpTruckTypeMap: Record<string, string> = {
+          '2tダンプ': '2t',
+          '3tダンプ': '3t',
+          '4tダンプ': '4t',
+          '4tロング': '4t',
+          '10tダンプ': '大型',
+        };
+        const legacyOtherStructure = '越境物、電線、電柱等';
+
         return {
           ...parsed,
+          inspector: ['萩嶋', '浅野', '星川', '白戸'].includes(parsed.inspector) ? parsed.inspector : '',
+          dumpTruckType: dumpTruckTypeMap[parsed.dumpTruckType] ?? parsed.dumpTruckType,
           roadRestriction: parsed.roadRestriction === '3t規制' ? '' : parsed.roadRestriction,
+          otherStructures: Array.isArray(parsed.otherStructures)
+            ? parsed.otherStructures.filter((item: string) => item !== legacyOtherStructure)
+            : [],
+          otherStructuresCustom:
+            Array.isArray(parsed.otherStructures) && parsed.otherStructures.includes(legacyOtherStructure) && !parsed.otherStructuresCustom
+              ? legacyOtherStructure
+              : parsed.otherStructuresCustom,
           buildings: Array.isArray(parsed.buildings)
             ? parsed.buildings.map((building: any) => ({
                 ...building,
