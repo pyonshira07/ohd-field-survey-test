@@ -72,6 +72,7 @@ export interface SurveyReport {
   mannenBlockArea: string; // 万年塀 (㎡)
   fenceArea: string; // フェンス (㎡)
   otaniStoneArea: string; // 大谷石 (㎡)
+  blockWallNote?: string; // ブロック塀の補足メモ
   hasRetainingWall?: boolean; // 擁壁あり
   otherStructures: string[]; // 浄化槽, 井戸, カーポート, 物置, 越境物、電線、電柱等
   otherStructuresCustom: string; // その他補足記入

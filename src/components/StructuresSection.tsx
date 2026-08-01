@@ -129,7 +129,7 @@ export const StructuresSection: React.FC<StructuresSectionProps> = ({ report, on
 
       {/* 【残置物】 */}
       <div className="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-3">
-        <div className="flex items-center justify-between flex-wrap gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <label className="text-xs font-bold text-slate-900 flex items-center gap-1">
             <Trash className="w-3.5 h-3.5 text-amber-600" />
             【残置物】
@@ -249,6 +249,13 @@ export const StructuresSection: React.FC<StructuresSectionProps> = ({ report, on
             </div>
           </div>
         </div>
+        <input
+          type="text"
+          value={report.blockWallNote || ''}
+          onChange={(e) => onChange({ blockWallNote: e.target.value })}
+          placeholder="道路面のRC擁壁部分は別途20㎡あります"
+          className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-medium text-slate-900 bg-white"
+        />
       </div>
 
       {/* ＜その他構造物＞ ※複数選択可 */}

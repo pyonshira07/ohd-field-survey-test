@@ -100,6 +100,7 @@ export function createEmptyReport(): SurveyReport {
     mannenBlockArea: '',
     fenceArea: '',
     otaniStoneArea: '',
+    blockWallNote: '',
     hasRetainingWall: false,
     otherStructures: [],
     otherStructuresCustom: '',

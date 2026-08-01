@@ -80,7 +80,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ report, onCh
 
       {/* 【道路幅/歩道幅/間口幅】 */}
       <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
-        <div className="flex items-center justify-between flex-wrap gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <label className="text-xs font-bold text-slate-900 flex items-center gap-1">
             【道路幅/歩道幅/間口幅】
           </label>
