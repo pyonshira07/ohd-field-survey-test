@@ -13,7 +13,7 @@ import { QuickToast } from './components/QuickToast';
 
 const LOCAL_STORAGE_HISTORY_KEY = 'demolition_survey_reports_history';
 const LOCAL_STORAGE_DRAFT_KEY = 'demolition_survey_report_draft';
-const CASE_REGISTRATION_API_URL = 'https://script.google.com/macros/s/AKfycbxxO-QeNgxkuyGwk-Ls6mJw-bbRXksJ8ehzx05kfTyqdl0YhSgmnXQEnRqnOk1wkFU6xw/exec';
+const SURVEY_AUTOMATION_API_URL = 'https://script.google.com/macros/s/AKfycbyyYtJpyynOyv4WcfstPfATl-G7YzoKp4o8kZtJ92eodnXbTJL34T-zpjc6iMu6u1qN/exec';
 
 export default function App() {
   const [report, setReport] = useState<SurveyReport>(() => {
@@ -77,6 +77,7 @@ export default function App() {
   const [isSubmissionCompleteOpen, setIsSubmissionCompleteOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResubmission, setIsResubmission] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Auto-save draft on report change
@@ -171,6 +172,7 @@ export default function App() {
 
   const handleConfirmSubmit = async () => {
     if (isSubmitting) return;
+    const isResubmitting = report.status === 'submitted';
 
     const submittedReport: SurveyReport = {
       ...report,
@@ -180,33 +182,28 @@ export default function App() {
 
     setIsSubmitting(true);
     try {
-      // Apps Script の公開APIへ、CORS の事前確認を発生させないシンプルなPOSTで送る。
-      // 同一の report.id はサーバー側で重複登録しない。
-      await fetch(CASE_REGISTRATION_API_URL, {
+      // CORS の事前確認を発生させないシンプルなPOSTで、開発用連携GASへ送る。
+      // GAS側で、案件フォルダ作成 → 見積書作成 → 統合案件管理へのURL付き登録を順に実行する。
+      // 同一の report.id はサーバー側で二重作成しない。
+      await fetch(SURVEY_AUTOMATION_API_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({
-          id: submittedReport.id,
-          caseName: submittedReport.caseName,
-          siteAddress: submittedReport.siteAddress,
-          clientType: submittedReport.clientType,
-          inspector: submittedReport.inspector,
-          surveyDate: submittedReport.surveyDate,
-        }),
+        body: JSON.stringify({ report: submittedReport }),
       });
     } catch {
-      showToast('統合案件管理へ送信できませんでした。通信を確認して再送信してください。');
+      showToast('案件フォルダ・見積書の自動作成を開始できませんでした。通信を確認して再送信してください。');
       return;
     } finally {
       setIsSubmitting(false);
     }
 
     setReport(submittedReport);
+    setIsResubmission(isResubmitting);
     handleSaveReportToHistory(submittedReport);
     setIsPreviewOpen(false);
     setIsSubmissionCompleteOpen(true);
-    showToast('報告データを送信・確定保存しました！');
+    showToast('報告を送信し、案件フォルダ・見積書の自動作成を開始しました！');
   };
 
   return (
@@ -258,7 +255,10 @@ export default function App() {
           <div role="dialog" aria-modal="true" aria-label="報告送信完了" className="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-2xl">
             <CheckCircle2 className="mx-auto mb-3 h-12 w-12 text-emerald-500" />
             <h2 className="text-lg font-extrabold text-slate-900">報告送信完了</h2>
-            <p className="mt-2 text-sm text-slate-600">調査内容を保存しました。</p>
+            <p className="mt-2 text-sm text-slate-600">案件フォルダ・見積書の作成と、統合案件管理への登録を開始しました。</p>
+            {isResubmission && (
+              <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-left text-xs font-bold leading-relaxed text-amber-900">自動作成した見積書の計算結果が更新されました。</p>
+            )}
             <p className="mt-4 text-left text-xs leading-relaxed text-slate-500">送信後に再び内容を変更したい場合は、画面上の「保存履歴」から対象の案件を選択して編集・再送信をお願いします。</p>
             <button type="button" onClick={() => setIsSubmissionCompleteOpen(false)} className="mt-5 w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-extrabold text-amber-400 transition-colors hover:bg-slate-800">入力画面に戻る</button>
           </div>

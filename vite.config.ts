@@ -5,6 +5,8 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    // GitHub Pages serves this project below /ohd-field-survey-test/.
+    base: '/ohd-field-survey-test/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
