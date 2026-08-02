@@ -23,6 +23,7 @@ export const HistoryListModal: React.FC<HistoryListModalProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'draft' | 'submitted'>('all');
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [pendingDeleteReport, setPendingDeleteReport] = useState<SurveyReport | null>(null);
 
   if (!isOpen) return null;
 
@@ -232,12 +233,7 @@ export const HistoryListModal: React.FC<HistoryListModalProps> = ({
 
                     <button
                       type="button"
-                      onClick={() => {
-                        if (confirm('この報告書履歴を削除してもよろしいですか？')) {
-                          onDeleteReport(report.id);
-                          showToast('報告書を削除しました');
-                        }
-                      }}
+                      onClick={() => setPendingDeleteReport(report)}
                       className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-colors"
                       title="削除"
                     >
@@ -256,6 +252,42 @@ export const HistoryListModal: React.FC<HistoryListModalProps> = ({
           )}
         </div>
       </div>
+
+      {pendingDeleteReport && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/45 p-4">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="案件削除の確認"
+            className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl"
+          >
+            <h4 className="text-base font-extrabold text-slate-900">案件を削除しますか？</h4>
+            <p className="mt-2 text-sm text-slate-600">
+              {pendingDeleteReport.siteAddress || '住所未入力の案件'}の保存済み報告を削除します。
+            </p>
+            <div className="mt-5 flex gap-3">
+              <button
+                type="button"
+                onClick={() => setPendingDeleteReport(null)}
+                className="flex-1 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50"
+              >
+                いいえ
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onDeleteReport(pendingDeleteReport.id);
+                  setPendingDeleteReport(null);
+                  showToast('報告書を削除しました');
+                }}
+                className="flex-1 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-red-700"
+              >
+                はい
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
