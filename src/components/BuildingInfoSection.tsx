@@ -63,7 +63,7 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
 
   return (
     <section className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-6">
-      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+      <div className="border-b border-slate-100 pb-3">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-sm">
             4
@@ -73,13 +73,6 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={addBuilding}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 text-xs font-bold transition-all shadow-sm active:scale-95"
-        >
-          <span>🏠 ＋建物を追加</span>
-        </button>
       </div>
 
       <div className="space-y-6">

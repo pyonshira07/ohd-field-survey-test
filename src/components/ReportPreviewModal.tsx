@@ -17,6 +17,30 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
   onConfirmSubmit,
   isSubmitting,
 }) => {
+  React.useEffect(() => {
+    if (!isOpen) return;
+
+    const scrollY = window.scrollY;
+    const originalPosition = document.body.style.position;
+    const originalTop = document.body.style.top;
+    const originalWidth = document.body.style.width;
+    const originalOverflow = document.body.style.overflow;
+
+    // モバイルでポップアップの外側をスワイプしても、背面の入力画面は動かさない。
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.position = originalPosition;
+      document.body.style.top = originalTop;
+      document.body.style.width = originalWidth;
+      document.body.style.overflow = originalOverflow;
+      window.scrollTo(0, scrollY);
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const hasValue = (value?: string | number | boolean) => value !== undefined && value !== '' && value !== false;
@@ -54,7 +78,7 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
             <X className="h-5 w-5" />
           </button>
         </div>
-        <div className="max-h-[55vh] space-y-3 overflow-y-auto bg-slate-50 p-4">
+        <div className="max-h-[55vh] space-y-3 overflow-y-auto overscroll-y-contain bg-slate-50 p-4">
           <section className="rounded-xl border border-slate-200 bg-white p-4">
             <h3 className="text-sm font-extrabold text-slate-900">案件概要</h3>
             <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
