@@ -164,29 +164,31 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ report, onCh
             <Car className="w-3.5 h-3.5 text-amber-600" />
             【交通量】
           </label>
-          {[
-            { key: 'trafficPedestrians', label: '通行人', value: report.trafficPedestrians ?? 1 },
-            { key: 'trafficCars', label: '車', value: report.trafficCars ?? 1 }
-          ].map((item) => (
-            <div key={item.key} className="space-y-1">
-              <div className="flex items-center justify-between text-xs font-bold text-slate-700">
-                <span>{item.label}</span><span>{item.value} / 5</span>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { key: 'trafficPedestrians', label: '通行人', value: report.trafficPedestrians ?? 1 },
+              { key: 'trafficCars', label: '車', value: report.trafficCars ?? 1 }
+            ].map((item) => (
+              <div key={item.key} className="flex flex-col items-center rounded-lg border border-slate-200 bg-white px-2 py-2">
+                <div className="mb-1 flex w-full items-center justify-between text-xs font-bold text-slate-700">
+                  <span>{item.label}</span><span>{item.value} / 5</span>
+                </div>
+                <span className="text-[10px] text-slate-500">5：多い</span>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  step="1"
+                  value={item.value}
+                  aria-label={`${item.label}の交通量`}
+                  onChange={(e) => onChange({ [item.key]: Number(e.target.value) })}
+                  className="h-32 w-8 cursor-pointer accent-amber-500"
+                  style={{ writingMode: 'vertical-lr', direction: 'rtl' }}
+                />
+                <span className="text-[10px] text-slate-500">1：少ない</span>
               </div>
-              <input
-                type="range"
-                min="1"
-                max="5"
-                step="1"
-                value={item.value}
-                onChange={(e) => onChange({ [item.key]: Number(e.target.value) })}
-                className="w-full accent-amber-500"
-              />
-              <div className="flex justify-between text-[10px] text-slate-500">
-                <span>1：少ない</span>
-                <span>5：多い</span>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* 【手運び】 */}

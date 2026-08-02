@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+/* iOS Safari は文字が16px未満の入力欄をフォーカスした際に画面を拡大する。 */
+@media (max-width: 640px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  /* 入力欄内に表示されるSafariの連絡先・認証情報アイコンを抑制する。 */
+  input::-webkit-contacts-auto-fill-button,
+  input::-webkit-credentials-auto-fill-button {
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
