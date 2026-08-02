@@ -43,7 +43,6 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
 
   if (!isOpen) return null;
 
-  const hasValue = (value?: string | number | boolean) => value !== undefined && value !== '' && value !== false;
   const formatArea = (value: string) => (value ? `${value}㎡` : '未入力');
   const formatLength = (value: string) => (value ? `${value}m` : '未入力');
   const NoteRow = ({ label, value }: { label: string; value?: string }) => (
@@ -65,14 +64,15 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
         <h3 className="text-sm font-extrabold text-slate-900">建物 {index + 1}</h3>
         <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
           <dt className="text-slate-500">構造</dt><dd className="font-semibold text-slate-800">{structure}</dd>
-          <dt className="text-slate-500">屋根</dt><dd className="font-semibold text-slate-800">{roof}</dd>
-          <dt className="text-slate-500">外壁</dt><dd className="font-semibold text-slate-800">{building.exteriorWall || '未入力'}</dd>
-          <dt className="text-slate-500">実寸面積</dt><dd className="font-semibold text-slate-800">{totalArea ? `${totalArea}㎡` : '未入力'}</dd>
-          {hasValue(building.manualDemolitionRatio) && <><dt className="text-slate-500">手壊し割合</dt><dd className="font-semibold text-slate-800">{building.manualDemolitionRatio}%</dd></>}
           <NoteRow label="構造の記述" value={building.structureNote} />
-          <NoteRow label="外壁の記述" value={building.exteriorWallNote} />
+          <dt className="text-slate-500">築年数</dt><dd className="font-semibold text-slate-800">{building.ageUnknown ? '不明' : [building.ageEra, building.ageYears && `${building.ageYears}年`].filter(Boolean).join(' ') || '未入力'}</dd>
+          <dt className="text-slate-500">屋根</dt><dd className="font-semibold text-slate-800">{roof}</dd>
           <NoteRow label="屋根の記述" value={building.roofNote} />
+          <dt className="text-slate-500">外壁</dt><dd className="font-semibold text-slate-800">{building.exteriorWall || '未入力'}</dd>
+          <NoteRow label="外壁の記述" value={building.exteriorWallNote} />
+          <dt className="text-slate-500">手壊し割合</dt><dd className="font-semibold text-slate-800">{building.manualDemolitionRatio || 0}%</dd>
           <NoteRow label="手壊しの記述" value={building.manualDemolitionNote} />
+          <dt className="text-slate-500">実寸面積</dt><dd className="font-semibold text-slate-800">{totalArea ? `${totalArea}㎡` : '未入力'}</dd>
           <NoteRow label="実寸面積の記述" value={building.note} />
         </dl>
       </section>
@@ -92,6 +92,10 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
           </button>
         </div>
         <div className="max-h-[55vh] space-y-3 overflow-y-auto overscroll-y-contain bg-slate-50 p-4">
+          <div className="rounded-xl border border-red-300 bg-red-50 p-3 text-sm font-bold leading-relaxed text-red-800">
+            <p>【重要】現地調査を不十分なまま報告すると、見積もりの精度が下がり、受注金額で負けたり大きな赤字につながるおそれがあります。</p>
+            <p className="mt-1">すべての項目を現地で責任を持って確認し、正確に記入してください。</p>
+          </div>
           <section className="rounded-xl border border-slate-200 bg-white p-4">
             <h3 className="text-sm font-extrabold text-slate-900">案件概要</h3>
             <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
@@ -106,15 +110,17 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
           <section className="rounded-xl border border-slate-200 bg-white p-4">
             <h3 className="text-sm font-extrabold text-slate-900">基本情報</h3>
             <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+              <NoteRow label="確認事項" value={report.notesAndPrecautions} />
               <dt className="text-slate-500">使用ダンプ</dt><dd className="font-semibold text-slate-800">{report.dumpTruckType || '未入力'}</dd>
+              <NoteRow label="使用ダンプの根拠" value={report.dumpTruckReason} />
               <dt className="text-slate-500">道路規制</dt><dd className="font-semibold text-slate-800">{report.roadRestriction || 'なし'}</dd>
               <dt className="text-slate-500">道路幅 / 歩道幅 / 間口幅</dt><dd className="font-semibold text-slate-800">{[report.roadWidth, report.sidewalkWidth, report.frontageWidth].map(formatLength).join(' / ')}</dd>
+              <dt className="text-slate-500">どんつき</dt><dd className="font-semibold text-slate-800">{report.isDeadEnd ? 'あり' : 'なし'}</dd>
+              <NoteRow label="道路幅・歩道幅・間口幅の記述" value={report.roadNote} />
               <dt className="text-slate-500">交通量</dt><dd className="font-semibold text-slate-800">通行人 {report.trafficPedestrians ?? '-'} / 車 {report.trafficCars ?? '-'}</dd>
+              <dt className="text-slate-500">手運び距離</dt><dd className="font-semibold text-slate-800">{formatLength(report.manualCarryDistance)}</dd>
+              <NoteRow label="手運びの記述" value={report.manualCarryNote} />
               <dt className="text-slate-500">足場可否</dt><dd className="font-semibold text-slate-800">右 {report.scaffoldRight || '-'} / 左 {report.scaffoldLeft || '-'} / 後 {report.scaffoldBack || '-'}</dd>
-              <NoteRow label="確認事項" value={report.notesAndPrecautions} />
-              <NoteRow label="使用ダンプの根拠" value={report.dumpTruckReason} />
-              <NoteRow label="道路規制の記述" value={report.roadNote} />
-              <NoteRow label="小運搬の記述" value={report.manualCarryNote} />
               <NoteRow label="足場の記述" value={report.scaffoldNote} />
             </dl>
           </section>
@@ -124,8 +130,12 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
             <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
               <dt className="text-slate-500">土間 / アスファルト</dt><dd className="font-semibold text-slate-800">{formatArea(report.domaArea)} / {formatArea(report.asphaltArea)}</dd>
               <dt className="text-slate-500">樹木 / 庭石</dt><dd className="font-semibold text-slate-800">{report.treeVolume || '未入力'}㎥ / {report.stoneVolume || '未入力'}㎥</dd>
-              <dt className="text-slate-500">その他構造物</dt><dd className="font-semibold text-slate-800">{report.otherStructures.length ? report.otherStructures.join('、') : 'なし'}</dd>
+              <dt className="text-slate-500">見えない庭石</dt><dd className="font-semibold text-slate-800">{report.hiddenStoneRatio ? `${report.hiddenStoneRatio}%` : '未入力'}</dd>
+              <dt className="text-slate-500">残置物</dt><dd className="font-semibold text-slate-800">室外 {report.outdoorLeftoverVolume || '未入力'}㎥ / 室内 {report.indoorLeftoverVolume || '未入力'}㎥</dd>
+              <dt className="text-slate-500">室内確認済</dt><dd className="font-semibold text-slate-800">{report.interiorChecked ? '確認済' : '未確認'}</dd>
+              <dt className="text-slate-500">ブロック塀</dt><dd className="font-semibold text-slate-800">コンクリ {formatArea(report.concreteBlockArea)} / 万年塀 {formatArea(report.mannenBlockArea)} / フェンス {formatArea(report.fenceArea)} / 大谷石 {formatArea(report.otaniStoneArea)}</dd>
               <NoteRow label="ブロック塀の記述" value={report.blockWallNote} />
+              <dt className="text-slate-500">その他構造物</dt><dd className="font-semibold text-slate-800">{report.otherStructures.length ? report.otherStructures.join('、') : 'なし'}</dd>
               <NoteRow label="その他構造物の記述" value={report.otherStructuresCustom} />
             </dl>
           </section>
