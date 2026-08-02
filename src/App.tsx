@@ -78,6 +78,7 @@ export default function App() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResubmission, setIsResubmission] = useState(false);
+  const [isNewReportConfirmOpen, setIsNewReportConfirmOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Auto-save draft on report change
@@ -134,12 +135,21 @@ export default function App() {
   };
 
   const handleNewReport = () => {
-    if (confirm('入力中の内容をクリアして、新しい報告書を作成しますか？')) {
-      const newEmpty = createEmptyReport();
-      setReport(newEmpty);
-      localStorage.removeItem(LOCAL_STORAGE_DRAFT_KEY);
-      showToast('フォームを初期化しました');
+    setIsNewReportConfirmOpen(true);
+  };
+
+  const createNewReport = () => {
+    const newEmpty = createEmptyReport();
+    setReport(newEmpty);
+    try {
+      localStorage.setItem(LOCAL_STORAGE_DRAFT_KEY, JSON.stringify(newEmpty));
+    } catch (e) {
+      console.error('Failed to prepare new report draft', e);
     }
+    setIsNewReportConfirmOpen(false);
+    setIsSubmissionCompleteOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showToast('新しい現地調査を開始できます');
   };
 
   const handleLoadSample = () => {
@@ -276,7 +286,20 @@ export default function App() {
               <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-left text-xs font-bold leading-relaxed text-amber-900">自動作成した見積書の計算結果が更新されました。</p>
             )}
             <p className="mt-4 text-left text-xs leading-relaxed text-slate-500">送信後に再び内容を変更したい場合は、画面上の保存履歴から対象の案件を選択して編集・再送信が可能です。</p>
-            <button type="button" onClick={() => setIsSubmissionCompleteOpen(false)} className="mt-5 w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-extrabold text-amber-400 transition-colors hover:bg-slate-800">閉じる</button>
+            <button type="button" onClick={createNewReport} className="mt-5 w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-extrabold text-amber-400 transition-colors hover:bg-slate-800">新規案件を作成</button>
+          </div>
+        </div>
+      )}
+
+      {isNewReportConfirmOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/80 p-4 backdrop-blur-sm">
+          <div role="dialog" aria-modal="true" aria-label="新規案件作成の確認" className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl">
+            <h2 className="text-lg font-extrabold text-slate-900">新規案件を作成しますか？</h2>
+            <p className="mt-2 text-sm leading-relaxed text-slate-600">現在入力している内容は白紙になります。必要な内容は先に一時保存してください。</p>
+            <div className="mt-5 flex gap-3">
+              <button type="button" onClick={() => setIsNewReportConfirmOpen(false)} className="flex-1 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-extrabold text-slate-700 transition-colors hover:bg-slate-50">いいえ</button>
+              <button type="button" onClick={createNewReport} className="flex-1 rounded-xl bg-amber-500 px-4 py-3 text-sm font-extrabold text-slate-950 transition-colors hover:bg-amber-400">はい、新規作成</button>
+            </div>
           </div>
         </div>
       )}
