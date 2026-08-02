@@ -227,7 +227,6 @@ export default function App() {
     }
     setIsPreviewOpen(false);
     setIsSubmissionCompleteOpen(true);
-    showToast('報告を受け付けました。案件フォルダ・見積書をバックグラウンドで作成します。');
   };
 
   return (
