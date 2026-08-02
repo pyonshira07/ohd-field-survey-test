@@ -179,18 +179,26 @@ export default function App() {
     };
 
     setIsSubmitting(true);
+    const payload = JSON.stringify({ report: submittedReport });
     try {
-      // CORS の事前確認を発生させないシンプルなPOSTで、開発用連携GASへ送る。
-      // GAS側で、案件フォルダ作成 → 見積書作成 → 統合案件管理へのURL付き登録を順に実行する。
-      // 同一の report.id はサーバー側で二重作成しない。
-      await fetch(SURVEY_AUTOMATION_API_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ report: submittedReport }),
-      });
+      // 見積書の複製・計算はGAS側で数十秒かかる。ブラウザが処理完了を待つと
+      // 現場では通信切断のように見えるため、送信をキューへ渡した時点で画面を完了にする。
+      // sendBeacon は画面遷移後も送信を継続でき、同一 report.id はGAS側で重複作成しない。
+      const body = new Blob([payload], { type: 'text/plain;charset=utf-8' });
+      const queued = typeof navigator.sendBeacon === 'function'
+        && navigator.sendBeacon(SURVEY_AUTOMATION_API_URL, body);
+
+      if (!queued) {
+        void fetch(SURVEY_AUTOMATION_API_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          keepalive: true,
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: payload,
+        });
+      }
     } catch {
-      showToast('案件フォルダ・見積書の自動作成を開始できませんでした。通信を確認して再送信してください。');
+      showToast('送信の受付を開始できませんでした。通信状況を確認して、もう一度送信してください。');
       return;
     } finally {
       setIsSubmitting(false);
@@ -201,7 +209,7 @@ export default function App() {
     handleSaveReportToHistory(submittedReport);
     setIsPreviewOpen(false);
     setIsSubmissionCompleteOpen(true);
-    showToast('報告を送信し、案件フォルダ・見積書の自動作成を開始しました！');
+    showToast('報告を受け付けました。案件フォルダ・見積書をバックグラウンドで作成します。');
   };
 
   return (
@@ -255,7 +263,8 @@ export default function App() {
           <div role="dialog" aria-modal="true" aria-label="報告送信完了" className="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-2xl">
             <CheckCircle2 className="mx-auto mb-3 h-12 w-12 text-emerald-500" />
             <h2 className="text-lg font-extrabold text-slate-900">報告送信完了</h2>
-            <p className="mt-2 text-sm text-slate-600">案件フォルダ・見積書の作成と、統合案件管理への登録を開始しました。</p>
+            <p className="mt-2 text-sm text-slate-600">案件フォルダ・見積書の作成と、統合案件管理への登録をバックグラウンドで開始しました。</p>
+            <p className="mt-3 text-xs leading-relaxed text-slate-500">作成には通常1〜2分ほどかかります。画面を閉じても処理は続きます。</p>
             {isResubmission && (
               <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-left text-xs font-bold leading-relaxed text-amber-900">自動作成した見積書の計算結果が更新されました。</p>
             )}
