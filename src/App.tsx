@@ -215,7 +215,8 @@ export default function App() {
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-3 sm:px-4 py-6 space-y-6">
         {/* Main Survey Form */}
-        <form onSubmit={(event) => event.preventDefault()} className="space-y-6" autoComplete="off">
+        {/* Deliberately not a <form>: mobile IME "決定" / Enter must never open the send preview. */}
+        <div className="space-y-6">
           <OverviewSection report={report} onChange={handleUpdateReport} onDraftSave={handleDraftSave} />
           <BasicInfoSection report={report} onChange={handleUpdateReport} onDraftSave={handleDraftSave} />
           <StructuresSection report={report} onChange={handleUpdateReport} onDraftSave={handleDraftSave} />
@@ -231,7 +232,7 @@ export default function App() {
               <span>調査内容を確認・送信</span>
             </button>
           </div>
-        </form>
+        </div>
       </main>
 
       {/* Footer */}
