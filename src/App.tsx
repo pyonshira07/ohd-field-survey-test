@@ -13,6 +13,7 @@ import { QuickToast } from './components/QuickToast';
 
 const LOCAL_STORAGE_HISTORY_KEY = 'demolition_survey_reports_history';
 const LOCAL_STORAGE_DRAFT_KEY = 'demolition_survey_report_draft';
+const CASE_REGISTRATION_API_URL = 'https://script.google.com/macros/s/AKfycbxxO-QeNgxkuyGwk-Ls6mJw-bbRXksJ8ehzx05kfTyqdl0YhSgmnXQEnRqnOk1wkFU6xw/exec';
 
 export default function App() {
   const [report, setReport] = useState<SurveyReport>(() => {
@@ -166,12 +167,34 @@ export default function App() {
     setIsPreviewOpen(true);
   };
 
-  const handleConfirmSubmit = () => {
+  const handleConfirmSubmit = async () => {
     const submittedReport: SurveyReport = {
       ...report,
       status: 'submitted',
       updatedAt: new Date().toISOString(),
     };
+
+    try {
+      // Apps Script の公開APIへ、CORS の事前確認を発生させないシンプルなPOSTで送る。
+      // 同一の report.id はサーバー側で重複登録しない。
+      await fetch(CASE_REGISTRATION_API_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          id: submittedReport.id,
+          caseName: submittedReport.caseName,
+          siteAddress: submittedReport.siteAddress,
+          clientType: submittedReport.clientType,
+          inspector: submittedReport.inspector,
+          surveyDate: submittedReport.surveyDate,
+        }),
+      });
+    } catch {
+      showToast('統合案件管理へ送信できませんでした。通信を確認して再送信してください。');
+      return;
+    }
+
     setReport(submittedReport);
     handleSaveReportToHistory(submittedReport);
     setIsPreviewOpen(false);
