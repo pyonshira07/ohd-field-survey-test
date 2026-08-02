@@ -262,14 +262,13 @@ export default function App() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm">
           <div role="dialog" aria-modal="true" aria-label="報告送信完了" className="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-2xl">
             <CheckCircle2 className="mx-auto mb-3 h-12 w-12 text-emerald-500" />
-            <h2 className="text-lg font-extrabold text-slate-900">報告送信完了</h2>
-            <p className="mt-2 text-sm text-slate-600">案件フォルダ・見積書の作成と、統合案件管理への登録をバックグラウンドで開始しました。</p>
-            <p className="mt-3 text-xs leading-relaxed text-slate-500">作成には通常1〜2分ほどかかります。画面を閉じても処理は続きます。</p>
+            <h2 className="text-lg font-extrabold text-slate-900">報告送信完了。画面を閉じてOKです。</h2>
+            <p className="mt-3 text-sm leading-relaxed text-slate-600">見積もり作成には1〜2分ほどかかります。</p>
             {isResubmission && (
               <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-left text-xs font-bold leading-relaxed text-amber-900">自動作成した見積書の計算結果が更新されました。</p>
             )}
-            <p className="mt-4 text-left text-xs leading-relaxed text-slate-500">送信後に再び内容を変更したい場合は、画面上の「保存履歴」から対象の案件を選択して編集・再送信をお願いします。</p>
-            <button type="button" onClick={() => setIsSubmissionCompleteOpen(false)} className="mt-5 w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-extrabold text-amber-400 transition-colors hover:bg-slate-800">入力画面に戻る</button>
+            <p className="mt-4 text-left text-xs leading-relaxed text-slate-500">送信後に再び内容を変更したい場合は、画面上の保存履歴から対象の案件を選択して編集・再送信が可能です。</p>
+            <button type="button" onClick={() => setIsSubmissionCompleteOpen(false)} className="mt-5 w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-extrabold text-amber-400 transition-colors hover:bg-slate-800">閉じる</button>
           </div>
         </div>
       )}
