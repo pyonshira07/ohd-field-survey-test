@@ -159,9 +159,7 @@ export default function App() {
     showToast('下書きを一時保存しました！一覧からいつでも再編集できます');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleOpenSubmissionPreview = () => {
     if (!report.siteAddress.trim() || !report.inspector.trim() || !report.surveyDate.trim() || !report.dumpTruckType.trim()) {
       showToast('必須項目（現場住所・調査担当・調査日・使用ダンプ）を入力してください');
       return;
@@ -217,7 +215,7 @@ export default function App() {
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-3 sm:px-4 py-6 space-y-6">
         {/* Main Survey Form */}
-        <form onSubmit={handleSubmit} className="space-y-6" autoComplete="off">
+        <form onSubmit={(event) => event.preventDefault()} className="space-y-6" autoComplete="off">
           <OverviewSection report={report} onChange={handleUpdateReport} onDraftSave={handleDraftSave} />
           <BasicInfoSection report={report} onChange={handleUpdateReport} onDraftSave={handleDraftSave} />
           <StructuresSection report={report} onChange={handleUpdateReport} onDraftSave={handleDraftSave} />
@@ -225,7 +223,8 @@ export default function App() {
 
           <div className="pt-2 pb-4">
             <button
-              type="submit"
+              type="button"
+              onClick={handleOpenSubmissionPreview}
               className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-base shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 active:scale-[0.99] border border-amber-400"
             >
               <Send className="w-5 h-5" />
