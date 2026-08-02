@@ -7,6 +7,7 @@ interface ReportPreviewModalProps {
   onClose: () => void;
   report: SurveyReport;
   onConfirmSubmit: () => void;
+  isSubmitting: boolean;
 }
 
 export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
@@ -14,6 +15,7 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
   onClose,
   report,
   onConfirmSubmit,
+  isSubmitting,
 }) => {
   if (!isOpen) return null;
 
@@ -91,8 +93,8 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
         </div>
         <div className="flex gap-3 border-t border-slate-200 bg-white p-4">
           <button type="button" onClick={onClose} className="flex-1 rounded-xl border border-slate-300 px-4 py-3 text-sm font-bold text-slate-700">修正する</button>
-          <button type="button" onClick={onConfirmSubmit} className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-amber-500 px-4 py-3 text-sm font-extrabold text-slate-950 shadow-sm hover:bg-amber-400">
-            <CheckCircle2 className="h-4 w-4" /> 報告を送信
+          <button type="button" onClick={onConfirmSubmit} disabled={isSubmitting} className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-amber-500 px-4 py-3 text-sm font-extrabold text-slate-950 shadow-sm hover:bg-amber-400 disabled:cursor-wait disabled:opacity-70">
+            <CheckCircle2 className="h-4 w-4" /> {isSubmitting ? '送信中...' : '報告を送信'}
           </button>
         </div>
       </div>

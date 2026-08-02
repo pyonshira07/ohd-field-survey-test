@@ -75,6 +75,7 @@ export default function App() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isSubmissionCompleteOpen, setIsSubmissionCompleteOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Auto-save draft on report change
@@ -168,12 +169,15 @@ export default function App() {
   };
 
   const handleConfirmSubmit = async () => {
+    if (isSubmitting) return;
+
     const submittedReport: SurveyReport = {
       ...report,
       status: 'submitted',
       updatedAt: new Date().toISOString(),
     };
 
+    setIsSubmitting(true);
     try {
       // Apps Script の公開APIへ、CORS の事前確認を発生させないシンプルなPOSTで送る。
       // 同一の report.id はサーバー側で重複登録しない。
@@ -193,6 +197,8 @@ export default function App() {
     } catch {
       showToast('統合案件管理へ送信できませんでした。通信を確認して再送信してください。');
       return;
+    } finally {
+      setIsSubmitting(false);
     }
 
     setReport(submittedReport);
@@ -243,6 +249,7 @@ export default function App() {
         onClose={() => setIsPreviewOpen(false)}
         report={report}
         onConfirmSubmit={handleConfirmSubmit}
+        isSubmitting={isSubmitting}
       />
 
       {isSubmissionCompleteOpen && (
