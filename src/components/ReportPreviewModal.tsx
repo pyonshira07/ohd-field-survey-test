@@ -46,6 +46,14 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
   const hasValue = (value?: string | number | boolean) => value !== undefined && value !== '' && value !== false;
   const formatArea = (value: string) => (value ? `${value}㎡` : '未入力');
   const formatLength = (value: string) => (value ? `${value}m` : '未入力');
+  const NoteRow = ({ label, value }: { label: string; value?: string }) => (
+    <>
+      <dt className="col-span-2 mt-1 text-slate-500">{label}</dt>
+      <dd className="col-span-2 whitespace-pre-wrap rounded-lg bg-slate-50 px-2.5 py-2 text-sm font-semibold leading-relaxed text-slate-800">
+        {value?.trim() || 'なし'}
+      </dd>
+    </>
+  );
   const formatBuilding = (building: SurveyReport['buildings'][number], index: number) => {
     const structure = [building.structure, building.structureSecondary].filter(Boolean).join(' ＋ ') || '未入力';
     const roof = [building.roofType, building.roofTypeSecondary].filter(Boolean).join(' ＋ ') || '未入力';
@@ -61,6 +69,11 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
           <dt className="text-slate-500">外壁</dt><dd className="font-semibold text-slate-800">{building.exteriorWall || '未入力'}</dd>
           <dt className="text-slate-500">実寸面積</dt><dd className="font-semibold text-slate-800">{totalArea ? `${totalArea}㎡` : '未入力'}</dd>
           {hasValue(building.manualDemolitionRatio) && <><dt className="text-slate-500">手壊し割合</dt><dd className="font-semibold text-slate-800">{building.manualDemolitionRatio}%</dd></>}
+          <NoteRow label="構造の記述" value={building.structureNote} />
+          <NoteRow label="外壁の記述" value={building.exteriorWallNote} />
+          <NoteRow label="屋根の記述" value={building.roofNote} />
+          <NoteRow label="手壊しの記述" value={building.manualDemolitionNote} />
+          <NoteRow label="実寸面積の記述" value={building.note} />
         </dl>
       </section>
     );
@@ -98,6 +111,11 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
               <dt className="text-slate-500">道路幅 / 歩道幅 / 間口幅</dt><dd className="font-semibold text-slate-800">{[report.roadWidth, report.sidewalkWidth, report.frontageWidth].map(formatLength).join(' / ')}</dd>
               <dt className="text-slate-500">交通量</dt><dd className="font-semibold text-slate-800">通行人 {report.trafficPedestrians ?? '-'} / 車 {report.trafficCars ?? '-'}</dd>
               <dt className="text-slate-500">足場可否</dt><dd className="font-semibold text-slate-800">右 {report.scaffoldRight || '-'} / 左 {report.scaffoldLeft || '-'} / 後 {report.scaffoldBack || '-'}</dd>
+              <NoteRow label="確認事項" value={report.notesAndPrecautions} />
+              <NoteRow label="使用ダンプの根拠" value={report.dumpTruckReason} />
+              <NoteRow label="道路規制の記述" value={report.roadNote} />
+              <NoteRow label="小運搬の記述" value={report.manualCarryNote} />
+              <NoteRow label="足場の記述" value={report.scaffoldNote} />
             </dl>
           </section>
 
@@ -107,6 +125,8 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
               <dt className="text-slate-500">土間 / アスファルト</dt><dd className="font-semibold text-slate-800">{formatArea(report.domaArea)} / {formatArea(report.asphaltArea)}</dd>
               <dt className="text-slate-500">樹木 / 庭石</dt><dd className="font-semibold text-slate-800">{report.treeVolume || '未入力'}㎥ / {report.stoneVolume || '未入力'}㎥</dd>
               <dt className="text-slate-500">その他構造物</dt><dd className="font-semibold text-slate-800">{report.otherStructures.length ? report.otherStructures.join('、') : 'なし'}</dd>
+              <NoteRow label="ブロック塀の記述" value={report.blockWallNote} />
+              <NoteRow label="その他構造物の記述" value={report.otherStructuresCustom} />
             </dl>
           </section>
 

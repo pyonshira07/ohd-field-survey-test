@@ -85,7 +85,7 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <span className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
                 <Home className="w-4 h-4 text-amber-600" />
-                ＜建物情報 {index + 1}＞
+                ＜建物 {index + 1}＞
               </span>
 
                 <button
