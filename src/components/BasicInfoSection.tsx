@@ -68,7 +68,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ report, onCh
             rows={3}
             value={report.dumpTruckReason}
             onChange={(e) => onChange({ dumpTruckReason: e.target.value })}
-            placeholder="例: 道路規制により。正面は広いが来る途中に4tで曲がれない狭さの一本道あり。"
+            placeholder="道路規制により。正面は広いが来る途中に4tで曲がれない狭さの一本道あり。"
             className="mt-1 w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500 text-sm text-slate-900 bg-slate-50 focus:bg-white transition-all"
           />
         </div>
@@ -161,7 +161,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ report, onCh
             type="text"
             value={report.roadNote}
             onChange={(e) => onChange({ roadNote: e.target.value })}
-            placeholder="補足メモ (例: カーポート壊せば4t余裕)"
+            placeholder="カーポート壊せば4t余裕"
             className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-medium text-slate-900 bg-white"
           />
         </div>
@@ -227,7 +227,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ report, onCh
             type="text"
             value={report.manualCarryNote}
             onChange={(e) => onChange({ manualCarryNote: e.target.value })}
-            placeholder="補足 (例: 道路面ブロック取りなら手運び不要)"
+            placeholder="道路面ブロック取りなら手運び不要"
             className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
           />
         </div>
@@ -310,7 +310,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ report, onCh
             type="text"
             value={report.scaffoldNote}
             onChange={(e) => onChange({ scaffoldNote: e.target.value })}
-            placeholder="補足メモ (例: 裏手狭小につき足場一部単管組み)"
+            placeholder="裏手狭小につき足場一部単管組み"
             className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-medium text-slate-900 bg-white"
           />
         </div>

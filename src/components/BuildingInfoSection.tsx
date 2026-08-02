@@ -137,7 +137,7 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                   type="text"
                   value={bldg.structureNote || ''}
                   onChange={(e) => updateBuilding(index, { structureNote: e.target.value })}
-                  placeholder="補足メモ（例：登記上は木・鉄骨造）"
+                  placeholder="登記上は木・鉄骨造"
                   className="mt-2 w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
                 />
               </div>
@@ -239,7 +239,7 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                   type="text"
                   value={bldg.roofNote || ''}
                   onChange={(e) => updateBuilding(index, { roofNote: e.target.value })}
-                  placeholder="補足メモ（例：一部陸屋根）"
+                  placeholder="一部陸屋根"
                   className="mt-2 w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
                 />
               </div>
@@ -260,7 +260,7 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                   type="text"
                   value={bldg.exteriorWallNote || ''}
                   onChange={(e) => updateBuilding(index, { exteriorWallNote: e.target.value })}
-                  placeholder="補足メモ（例：一部タイル貼り）"
+                  placeholder="一部タイル貼り"
                   className="mt-2 w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
                 />
               </div>
@@ -279,7 +279,7 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                     const digits = e.target.value.replace(/[^0-9]/g, '');
                     updateBuilding(index, { manualDemolitionRatio: digits ? Number(digits) : 0 });
                   }}
-                  placeholder="例：30"
+                  placeholder="30"
                   className="w-full px-3 py-2 pr-8 rounded-lg border border-slate-300 text-sm font-semibold text-slate-900 bg-white"
                 />
                 <span className="absolute right-3 top-2.5 text-sm text-slate-500 font-bold">%</span>
@@ -288,7 +288,7 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                 type="text"
                 value={bldg.manualDemolitionNote}
                 onChange={(e) => updateBuilding(index, { manualDemolitionNote: e.target.value })}
-                placeholder="補足メモ（例：2、3F全部と1F少し）"
+                placeholder="2、3F全部と1F少し"
                 className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-slate-50"
               />
             </div>
@@ -391,7 +391,7 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                   type="text"
                   value={bldg.note}
                   onChange={(e) => updateBuilding(index, { note: e.target.value })}
-                  placeholder="補足メモ (例: 2階が増築っぽい。外壁リフォームしてる？)"
+                  placeholder="2階が増築っぽい。外壁リフォームしてる？"
                   className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-slate-50"
                 />
               </div>

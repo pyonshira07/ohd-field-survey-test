@@ -41,7 +41,7 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({ report, onChan
             type="text"
             value={report.siteAddress}
             onChange={(e) => onChange({ siteAddress: e.target.value })}
-            placeholder="例: 東京都世田谷区桜丘1-2-3"
+            placeholder="東京都世田谷区桜丘1-2-3"
             className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm font-medium text-slate-900 bg-slate-50 focus:bg-white transition-all"
             required
           />
@@ -57,7 +57,7 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({ report, onChan
             type="text"
             value={report.caseName || ''}
             onChange={(e) => onChange({ caseName: e.target.value })}
-            placeholder="例：東大泉123II②"
+            placeholder="東大泉123II②"
             className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500 text-sm font-medium text-slate-900 bg-slate-50 focus:bg-white transition-all"
           />
         </div>
