@@ -67,6 +67,7 @@ export function createEmptyReport(): SurveyReport {
     updatedAt: new Date().toISOString(),
     status: 'draft',
 
+    caseName: '',
     siteAddress: '',
     inspector: '',
     surveyDate: todayStr,
@@ -116,13 +117,13 @@ export function createEmptyReport(): SurveyReport {
         roofType: '瓦',
         exteriorWall: 'モルタル',
         manualDemolitionRatio: 0,
-        manualDemolitionNote: '2,3F全部と1F少し',
+        manualDemolitionNote: '',
         areaAsRegistry: true,
         area1F: '',
         area2F: '',
         area3F: '',
         areaBasement: '',
-        note: '2階が増築っぽい。外壁リフォームしてる？'
+        note: ''
       }
     ]
   };
@@ -135,6 +136,7 @@ export function createSampleReport(): SurveyReport {
     updatedAt: new Date().toISOString(),
     status: 'submitted',
 
+    caseName: '桜丘1-2-3解体工事',
     siteAddress: '東京都世田谷区桜丘1-2-3',
     inspector: '山田太郎',
     surveyDate: '2026/07/29',
