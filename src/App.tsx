@@ -204,9 +204,17 @@ export default function App() {
       setIsSubmitting(false);
     }
 
-    setReport(submittedReport);
     setIsResubmission(isResubmitting);
     handleSaveReportToHistory(submittedReport);
+    // 送信済み案件のIDを入力画面に残すと、次の現場が再送信として同じ見積書を更新してしまう。
+    // 履歴には送信内容を残し、画面と自動保存用下書きは必ず新規IDの白紙案件へ切り替える。
+    const nextReport = createEmptyReport();
+    setReport(nextReport);
+    try {
+      localStorage.setItem(LOCAL_STORAGE_DRAFT_KEY, JSON.stringify(nextReport));
+    } catch (e) {
+      console.error('Failed to prepare next report draft', e);
+    }
     setIsPreviewOpen(false);
     setIsSubmissionCompleteOpen(true);
     showToast('報告を受け付けました。案件フォルダ・見積書をバックグラウンドで作成します。');
