@@ -35,6 +35,7 @@ export default function App() {
           ...parsed,
           inspector: ['萩嶋', '浅野', '星川', '白戸'].includes(parsed.inspector) ? parsed.inspector : '',
           dumpTruckType: dumpTruckTypeMap[parsed.dumpTruckType] ?? parsed.dumpTruckType,
+          dumpTruckReason: parsed.dumpTruckReason ?? '',
           roadRestriction: parsed.roadRestriction === '3t規制' ? '' : parsed.roadRestriction,
           otherStructures: Array.isArray(parsed.otherStructures)
             ? parsed.otherStructures.filter((item: string) => item !== legacyOtherStructure)

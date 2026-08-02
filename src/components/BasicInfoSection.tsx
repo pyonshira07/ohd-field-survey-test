@@ -60,6 +60,17 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ report, onCh
               </option>
             ))}
           </select>
+          <label className="mt-3 block text-xs font-bold text-slate-700">
+            【使用ダンプの根拠】
+            <span className="ml-1 text-[10px] font-medium text-slate-500">※納得できる根拠を提示すること</span>
+          </label>
+          <textarea
+            rows={3}
+            value={report.dumpTruckReason}
+            onChange={(e) => onChange({ dumpTruckReason: e.target.value })}
+            placeholder="例: 道路規制により。正面は広いが来る途中に4tで曲がれない狭さの一本道あり。"
+            className="mt-1 w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500 text-sm text-slate-900 bg-slate-50 focus:bg-white transition-all"
+          />
         </div>
 
         {/* 【道路規制】 */}

@@ -43,6 +43,7 @@ export interface SurveyReport {
   // ＜基本情報＞
   notesAndPrecautions: string; // 【確認事項】 (住人状況、治安、クレーム対策等)
   dumpTruckType: string; // 【使用ダンプ】
+  dumpTruckReason: string; // 【使用ダンプの根拠】
   roadRestriction: string; // 【道路規制】 (3t規制, etc.)
   isDeadEnd: boolean; // どんつき
   roadWidth: string; // 道路幅 (m)

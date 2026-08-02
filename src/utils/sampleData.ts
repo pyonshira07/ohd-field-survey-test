@@ -74,6 +74,7 @@ export function createEmptyReport(): SurveyReport {
 
     notesAndPrecautions: '',
     dumpTruckType: '',
+    dumpTruckReason: '',
     roadRestriction: '',
     isDeadEnd: false,
     roadWidth: '',
@@ -141,6 +142,7 @@ export function createSampleReport(): SurveyReport {
 
     notesAndPrecautions: '住人近隣挨拶済。治安良好。朝8:30前の重機作業NG。隣家からのクレーム予防に防音シート必須。',
     dumpTruckType: '3tダンプ',
+    dumpTruckReason: '道路規制により。正面は広いが来る途中に4tで曲がれない狭さの一本道あり。',
     roadRestriction: '3t規制',
     isDeadEnd: true,
     roadWidth: '4.2',
