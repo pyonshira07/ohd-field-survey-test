@@ -249,12 +249,12 @@ export const StructuresSection: React.FC<StructuresSectionProps> = ({ report, on
             </div>
           </div>
         </div>
-        <input
-          type="text"
+        <textarea
+          rows={2}
           value={report.blockWallNote || ''}
           onChange={(e) => onChange({ blockWallNote: e.target.value })}
           placeholder="道路面のRC擁壁部分は別途20㎡あります"
-          className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-medium text-slate-900 bg-white"
+          className="w-full resize-y px-3 py-2 rounded-lg border border-slate-300 text-xs font-medium text-slate-900 bg-white"
         />
       </div>
 
@@ -287,12 +287,12 @@ export const StructuresSection: React.FC<StructuresSectionProps> = ({ report, on
         </div>
 
         <div>
-          <input
-            type="text"
+          <textarea
+            rows={2}
             value={report.otherStructuresCustom}
             onChange={(e) => onChange({ otherStructuresCustom: e.target.value })}
             placeholder="越境物、電線、電柱等"
-            className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-medium text-slate-900 bg-white"
+            className="w-full resize-y px-3 py-2 rounded-lg border border-slate-300 text-xs font-medium text-slate-900 bg-white"
           />
         </div>
       </div>

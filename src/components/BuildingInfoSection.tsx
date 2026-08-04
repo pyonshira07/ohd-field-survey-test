@@ -1,6 +1,7 @@
 import React from 'react';
 import { Home, Plus, Trash2, Layers3 } from 'lucide-react';
 import { BuildingInfo, SurveyReport } from '../types';
+import { formatAreaValue, isTwoDecimalAreaInput, normaliseAreaInput, toAreaHundredths } from '../utils/area';
 
 interface BuildingInfoSectionProps {
   report: SurveyReport;
@@ -14,7 +15,11 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
 
   const calculateTotalFloorArea = (building: BuildingInfo) =>
     [building.area1F, building.area2F, building.area3F, building.areaBasement]
-      .reduce((total, value) => total + (Number.parseFloat(value) || 0), 0);
+      .reduce((total, value) => total + toAreaHundredths(value), 0) / 100;
+
+  const updateArea = (index: number, field: 'area1F' | 'area2F' | 'area3F' | 'areaBasement', value: string) => {
+    if (isTwoDecimalAreaInput(value)) updateBuilding(index, { [field]: value });
+  };
 
   const updateBuilding = (index: number, updated: Partial<BuildingInfo>) => {
     const nextBuildings = [...buildings];
@@ -126,12 +131,12 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                   </select>
                 </div>
                 <p className="mt-1 text-[11px] text-slate-500">複合構造の場合は、2つ目も選択してください。</p>
-                <input
-                  type="text"
+                <textarea
+                  rows={2}
                   value={bldg.structureNote || ''}
                   onChange={(e) => updateBuilding(index, { structureNote: e.target.value })}
                   placeholder="登記上は木・鉄骨造"
-                  className="mt-2 w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
+                  className="mt-2 w-full resize-y px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
                 />
               </div>
 
@@ -228,12 +233,12 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                   </select>
                 </div>
                 <p className="mt-1 text-[11px] text-slate-500">複合屋根の場合は、2つ目も選択してください。</p>
-                <input
-                  type="text"
+                <textarea
+                  rows={2}
                   value={bldg.roofNote || ''}
                   onChange={(e) => updateBuilding(index, { roofNote: e.target.value })}
                   placeholder="一部陸屋根"
-                  className="mt-2 w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
+                  className="mt-2 w-full resize-y px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
                 />
               </div>
 
@@ -249,12 +254,12 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                     <option key={option} value={option}>{option}</option>
                   ))}
                 </select>
-                <input
-                  type="text"
+                <textarea
+                  rows={2}
                   value={bldg.exteriorWallNote || ''}
                   onChange={(e) => updateBuilding(index, { exteriorWallNote: e.target.value })}
                   placeholder="一部タイル貼り"
-                  className="mt-2 w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
+                  className="mt-2 w-full resize-y px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
                 />
               </div>
             </div>
@@ -277,12 +282,12 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                 />
                 <span className="absolute right-3 top-2.5 text-sm text-slate-500 font-bold">%</span>
               </div>
-              <input
-                type="text"
+              <textarea
+                rows={2}
                 value={bldg.manualDemolitionNote}
                 onChange={(e) => updateBuilding(index, { manualDemolitionNote: e.target.value })}
                 placeholder="2、3F全部と1F少し"
-                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-slate-50"
+                className="w-full resize-y px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-slate-50"
               />
             </div>
 
@@ -319,9 +324,10 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                   <div className="relative">
                     <input
                       type="number"
-                      step="0.1"
+                      step="0.01"
                       value={bldg.area1F}
-                      onChange={(e) => updateBuilding(index, { area1F: e.target.value })}
+                      onChange={(e) => updateArea(index, 'area1F', e.target.value)}
+                      onBlur={(e) => updateBuilding(index, { area1F: normaliseAreaInput(e.target.value) })}
                       placeholder="0"
                       className="w-full px-2.5 py-1.5 pr-6 rounded-lg border border-slate-300 text-xs font-semibold bg-slate-50"
                     />
@@ -334,9 +340,10 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                   <div className="relative">
                     <input
                       type="number"
-                      step="0.1"
+                      step="0.01"
                       value={bldg.area2F}
-                      onChange={(e) => updateBuilding(index, { area2F: e.target.value })}
+                      onChange={(e) => updateArea(index, 'area2F', e.target.value)}
+                      onBlur={(e) => updateBuilding(index, { area2F: normaliseAreaInput(e.target.value) })}
                       placeholder="0"
                       className="w-full px-2.5 py-1.5 pr-6 rounded-lg border border-slate-300 text-xs font-semibold bg-slate-50"
                     />
@@ -349,9 +356,10 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                   <div className="relative">
                     <input
                       type="number"
-                      step="0.1"
+                      step="0.01"
                       value={bldg.area3F}
-                      onChange={(e) => updateBuilding(index, { area3F: e.target.value })}
+                      onChange={(e) => updateArea(index, 'area3F', e.target.value)}
+                      onBlur={(e) => updateBuilding(index, { area3F: normaliseAreaInput(e.target.value) })}
                       placeholder="0"
                       className="w-full px-2.5 py-1.5 pr-6 rounded-lg border border-slate-300 text-xs font-semibold bg-slate-50"
                     />
@@ -364,9 +372,10 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
                   <div className="relative">
                     <input
                       type="number"
-                      step="0.1"
+                      step="0.01"
                       value={bldg.areaBasement}
-                      onChange={(e) => updateBuilding(index, { areaBasement: e.target.value })}
+                      onChange={(e) => updateArea(index, 'areaBasement', e.target.value)}
+                      onBlur={(e) => updateBuilding(index, { areaBasement: normaliseAreaInput(e.target.value) })}
                       placeholder="0"
                       className="w-full px-2.5 py-1.5 pr-6 rounded-lg border border-slate-300 text-xs font-semibold bg-slate-50"
                     />
@@ -376,16 +385,16 @@ export const BuildingInfoSection: React.FC<BuildingInfoSectionProps> = ({ report
               </div>
 
               <p className="text-sm font-extrabold text-red-600">
-                延べ床面積：{calculateTotalFloorArea(bldg).toLocaleString('ja-JP', { maximumFractionDigits: 1 })}㎡
+                延べ床面積：{formatAreaValue(calculateTotalFloorArea(bldg))}㎡
               </p>
 
               <div>
-                <input
-                  type="text"
+                <textarea
+                  rows={2}
                   value={bldg.note}
                   onChange={(e) => updateBuilding(index, { note: e.target.value })}
                   placeholder="2階が増築っぽい。外壁リフォームしてる？"
-                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-slate-50"
+                  className="w-full resize-y px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-slate-50"
                 />
               </div>
             </div>

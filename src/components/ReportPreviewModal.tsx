@@ -1,6 +1,7 @@
 import React from 'react';
 import { CheckCircle2, X } from 'lucide-react';
 import { SurveyReport } from '../types';
+import { formatAreaValue, toAreaHundredths } from '../utils/area';
 
 interface ReportPreviewModalProps {
   isOpen: boolean;
@@ -43,7 +44,7 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
 
   if (!isOpen) return null;
 
-  const formatArea = (value: string) => (value ? `${value}㎡` : '未入力');
+  const formatArea = (value: string) => (value ? `${formatAreaValue(value)}㎡` : '未入力');
   const formatLength = (value: string) => (value ? `${value}m` : '未入力');
   const NoteRow = ({ label, value }: { label: string; value?: string }) => (
     <>
@@ -56,8 +57,9 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
   const formatBuilding = (building: SurveyReport['buildings'][number], index: number) => {
     const structure = [building.structure, building.structureSecondary].filter(Boolean).join(' ＋ ') || '未入力';
     const roof = [building.roofType, building.roofTypeSecondary].filter(Boolean).join(' ＋ ') || '未入力';
-    const totalArea = [building.area1F, building.area2F, building.area3F, building.areaBasement]
-      .reduce((total, value) => total + (Number(value) || 0), 0);
+    const areas = [building.area1F, building.area2F, building.area3F, building.areaBasement];
+    const hasArea = areas.some((value) => value !== '');
+    const totalArea = areas.reduce((total, value) => total + toAreaHundredths(value), 0) / 100;
 
     return (
       <section key={building.id} className="rounded-xl border border-slate-200 bg-white p-4">
@@ -72,7 +74,7 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
           <NoteRow label="外壁の記述" value={building.exteriorWallNote} />
           <dt className="text-slate-500">手壊し割合</dt><dd className="font-semibold text-slate-800">{building.manualDemolitionRatio || 0}%</dd>
           <NoteRow label="手壊しの記述" value={building.manualDemolitionNote} />
-          <dt className="text-slate-500">実寸面積</dt><dd className="font-semibold text-slate-800">{totalArea ? `${totalArea}㎡` : '未入力'}</dd>
+          <dt className="text-slate-500">実寸面積</dt><dd className="font-semibold text-slate-800">{hasArea ? `${formatAreaValue(totalArea)}㎡` : '未入力'}</dd>
           <NoteRow label="実寸面積の記述" value={building.note} />
         </dl>
       </section>

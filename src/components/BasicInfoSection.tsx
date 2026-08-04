@@ -157,12 +157,12 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ report, onCh
         </div>
 
         <div>
-          <input
-            type="text"
+          <textarea
+            rows={2}
             value={report.roadNote}
             onChange={(e) => onChange({ roadNote: e.target.value })}
             placeholder="カーポート壊せば4t余裕"
-            className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-medium text-slate-900 bg-white"
+            className="w-full resize-y px-3 py-2 rounded-lg border border-slate-300 text-xs font-medium text-slate-900 bg-white"
           />
         </div>
       </div>
@@ -223,12 +223,12 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ report, onCh
               <span className="absolute right-2.5 top-2 text-xs text-slate-400 font-bold">m</span>
             </div>
           </div>
-          <input
-            type="text"
+          <textarea
+            rows={2}
             value={report.manualCarryNote}
             onChange={(e) => onChange({ manualCarryNote: e.target.value })}
             placeholder="道路面ブロック取りなら手運び不要"
-            className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
+            className="w-full resize-y px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 bg-white"
           />
         </div>
       </div>
@@ -306,12 +306,12 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ report, onCh
         </div>
 
         <div>
-          <input
-            type="text"
+          <textarea
+            rows={2}
             value={report.scaffoldNote}
             onChange={(e) => onChange({ scaffoldNote: e.target.value })}
             placeholder="裏手狭小につき足場一部単管組み"
-            className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-medium text-slate-900 bg-white"
+            className="w-full resize-y px-3 py-2 rounded-lg border border-slate-300 text-xs font-medium text-slate-900 bg-white"
           />
         </div>
       </div>
