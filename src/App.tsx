@@ -263,7 +263,7 @@ export default function App() {
       {/* Footer */}
       <footer className="mt-8 py-6 bg-slate-900 border-t border-slate-800 text-slate-400 text-xs text-center">
         <p className="font-semibold text-slate-300">解体業 現地調査報告システム FMT</p>
-        <p className="text-[11px] text-slate-500 mt-1">新案件管理連携用｜写真・謄本スキャンなし</p>
+        <p className="text-[11px] text-slate-500 mt-1">現在従業員に公開中です</p>
       </footer>
 
       {/* Modals & Toast */}
